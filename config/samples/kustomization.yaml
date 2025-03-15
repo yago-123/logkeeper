@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- logs_v1_logship.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples
