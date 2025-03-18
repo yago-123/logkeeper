@@ -18,7 +18,7 @@ package controller
 
 import (
 	"context"
-
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -49,7 +49,23 @@ type LogShipperReconciler struct {
 func (r *LogShipperReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	// Retrieve the custom resource from the API server
+	logShipper := &loggingv1alpha1.LogShipper{}
+	if err := r.Get(ctx, req.NamespacedName, logShipper); err != nil {
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	// Obtain list of nodes and filter them based on nodeSelector
+	var nodes corev1.NodeList
+	if err := r.List(ctx, &nodes); err != nil {
+		return ctrl.Result{}, err
+	}
+	desiredNodes := []corev1.Node{}
+	for _, node := range nodes.Items {
+		if matchesSelector(node, logShipper.Spec.NodeSelector) {
+			desiredNodes = append(desiredNodes, node)
+		}
+	}
 
 	return ctrl.Result{}, nil
 }
@@ -60,4 +76,14 @@ func (r *LogShipperReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&loggingv1alpha1.LogShipper{}).
 		Named("logshipper").
 		Complete(r)
+}
+
+// matchesSelector returns true if the node matches the given nodeSelector keys and values.
+func matchesSelector(node corev1.Node, selector map[string]string) bool {
+	for key, value := range selector {
+		if nodeValue, exists := node.Labels[key]; !exists || nodeValue != value {
+			return false
+		}
+	}
+	return true
 }
