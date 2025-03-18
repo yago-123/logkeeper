@@ -18,7 +18,10 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -67,6 +70,28 @@ func (r *LogShipperReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		}
 	}
 
+	// Ensure a pod exists for each desired node
+	for _, node := range desiredNodes {
+		// Generate pod name based on log shipper name and node name
+		podName := fmt.Sprintf("%s-%s", logShipper.Name, node.Name)
+
+		existingPod := &corev1.Pod{}
+		err := r.Get(ctx, client.ObjectKey{Name: podName}, existingPod)
+		if err != nil && errors.IsNotFound(err) {
+			// Pod doesn't exist, create it
+			newPod := createLogShipperPod(podName, logShipper.Spec.Image, node.Name, logShipper.Namespace)
+			if err := r.Create(ctx, newPod); err != nil {
+				return ctrl.Result{}, err
+			}
+		} else if err != nil {
+			// Error occurred while checking for existing pod
+			return ctrl.Result{}, err
+		} else {
+			// Pod exists, ensure it's running and matches desired state
+			// todo(): ensure it's running and matches desired state
+		}
+	}
+
 	return ctrl.Result{}, nil
 }
 
@@ -86,4 +111,23 @@ func matchesSelector(node corev1.Node, selector map[string]string) bool {
 		}
 	}
 	return true
+}
+
+func createLogShipperPod(podName, podImage, nodeName, namespace string) *corev1.Pod {
+	return &corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      podName,
+			Namespace: namespace,
+			Labels:    map[string]string{"app": "log-shipper", "node": nodeName},
+		},
+		Spec: corev1.PodSpec{
+			Containers: []corev1.Container{
+				{
+					Name:  "log-shipper",
+					Image: podImage,
+				},
+			},
+			NodeName: nodeName,
+		},
+	}
 }
