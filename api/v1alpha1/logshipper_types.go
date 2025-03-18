@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -25,17 +26,20 @@ import (
 
 // LogShipperSpec defines the desired state of LogShipper.
 type LogShipperSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Image is the container image for the log shipper pod.
+	// +kubebuilder:validation:MinLength=1
+	Image string `json:"image"`
 
-	// Foo is an example field of LogShipper. Edit logshipper_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// NodeSelector is used to select nodes where the log shipper pods should run.
+	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
+
+	// Resources define the resource requests and limits for the log shipper pods.
+	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
 }
 
 // LogShipperStatus defines the observed state of LogShipper.
 type LogShipperStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
 }
 
 // +kubebuilder:object:root=true
