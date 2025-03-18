@@ -1,8 +1,18 @@
-# logkeeper
-// TODO(user): Add simple overview of use/purpose
+# LogKeeper - Kubernetes Log Operator
 
-## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+`LogKeeper` is a Kubernetes Operator designed to capture, process, and store logs within your cluster. It automates log collection, ensures efficient storage, and simplifies log retrieval, providing a seamless logging experience for Kubernetes workloads.
+
+Features:
+* Declarative log shipping via CRDs
+* Flexible storage and processing options
+* Node-aware log collection
+
+## Quickstart 
+
+```bash
+$ 
+```
+
 
 ## Getting Started
 
@@ -12,7 +22,7 @@
 - kubectl version v1.11.3+.
 - Access to a Kubernetes v1.11.3+ cluster.
 
-### To Deploy on the cluster
+### Development Instructions
 **Build and push your image to the location specified by `IMG`:**
 
 ```sh

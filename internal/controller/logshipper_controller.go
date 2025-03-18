@@ -105,6 +105,10 @@ func (r *LogShipperReconciler) SetupWithManager(mgr ctrl.Manager) error {
 
 // matchesSelector returns true if the node matches the given nodeSelector keys and values.
 func matchesSelector(node corev1.Node, selector map[string]string) bool {
+	if len(selector) == 0 {
+		return true
+	}
+
 	for key, value := range selector {
 		if nodeValue, exists := node.Labels[key]; !exists || nodeValue != value {
 			return false
