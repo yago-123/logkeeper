@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1
+package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -23,17 +23,17 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// LogShipSpec defines the desired state of LogShip.
-type LogShipSpec struct {
+// LogShipperSpec defines the desired state of LogShipper.
+type LogShipperSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of LogShip. Edit logship_types.go to remove/update
+	// Foo is an example field of LogShipper. Edit logshipper_types.go to remove/update
 	Foo string `json:"foo,omitempty"`
 }
 
-// LogShipStatus defines the observed state of LogShip.
-type LogShipStatus struct {
+// LogShipperStatus defines the observed state of LogShipper.
+type LogShipperStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
@@ -41,24 +41,24 @@ type LogShipStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// LogShip is the Schema for the logships API.
-type LogShip struct {
+// LogShipper is the Schema for the logshippers API.
+type LogShipper struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   LogShipSpec   `json:"spec,omitempty"`
-	Status LogShipStatus `json:"status,omitempty"`
+	Spec   LogShipperSpec   `json:"spec,omitempty"`
+	Status LogShipperStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// LogShipList contains a list of LogShip.
-type LogShipList struct {
+// LogShipperList contains a list of LogShipper.
+type LogShipperList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []LogShip `json:"items"`
+	Items           []LogShipper `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&LogShip{}, &LogShipList{})
+	SchemeBuilder.Register(&LogShipper{}, &LogShipperList{})
 }

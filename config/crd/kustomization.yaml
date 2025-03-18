@@ -2,7 +2,7 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
-- bases/logs.yago.ninja_logships.yaml
+- bases/logging.yago.ninja_logshippers.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
 patches:

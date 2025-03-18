@@ -22,7 +22,7 @@ resources:
 # default, aiding admins in cluster management. Those roles are
 # not used by the {{ .ProjectName }} itself. You can comment the following lines
 # if you do not want those helpers be installed with your Project.
-- logship_admin_role.yaml
-- logship_editor_role.yaml
-- logship_viewer_role.yaml
+- logshipper_admin_role.yaml
+- logshipper_editor_role.yaml
+- logshipper_viewer_role.yaml
 

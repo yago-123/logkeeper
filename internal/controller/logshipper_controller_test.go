@@ -27,10 +27,10 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	logsv1 "github.com/yago-123/logkeeper/api/v1"
+	loggingv1alpha1 "github.com/yago-123/logkeeper/api/v1alpha1"
 )
 
-var _ = Describe("LogShip Controller", func() {
+var _ = Describe("LogShipper Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
 
@@ -40,13 +40,13 @@ var _ = Describe("LogShip Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		logship := &logsv1.LogShip{}
+		logshipper := &loggingv1alpha1.LogShipper{}
 
 		BeforeEach(func() {
-			By("creating the custom resource for the Kind LogShip")
-			err := k8sClient.Get(ctx, typeNamespacedName, logship)
+			By("creating the custom resource for the Kind LogShipper")
+			err := k8sClient.Get(ctx, typeNamespacedName, logshipper)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &logsv1.LogShip{
+				resource := &loggingv1alpha1.LogShipper{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -59,16 +59,16 @@ var _ = Describe("LogShip Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &logsv1.LogShip{}
+			resource := &loggingv1alpha1.LogShipper{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 
-			By("Cleanup the specific resource instance LogShip")
+			By("Cleanup the specific resource instance LogShipper")
 			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &LogShipReconciler{
+			controllerReconciler := &LogShipperReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
 			}

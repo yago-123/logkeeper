@@ -13,8 +13,8 @@ resources:
     namespaced: true
   controller: true
   domain: yago.ninja
-  group: logs
-  kind: LogShip
-  path: github.com/yago-123/logkeeper/api/v1
-  version: v1
+  group: logging
+  kind: LogShipper
+  path: github.com/yago-123/logkeeper/api/v1alpha1
+  version: v1alpha1
 version: "3"

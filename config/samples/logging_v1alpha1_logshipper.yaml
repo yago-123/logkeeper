@@ -1,9 +1,9 @@
-apiVersion: logs.yago.ninja/v1
-kind: LogShip
+apiVersion: logging.yago.ninja/v1alpha1
+kind: LogShipper
 metadata:
   labels:
     app.kubernetes.io/name: logkeeper
     app.kubernetes.io/managed-by: kustomize
-  name: logship-sample
+  name: logshipper-sample
 spec:
   # TODO(user): Add fields here
